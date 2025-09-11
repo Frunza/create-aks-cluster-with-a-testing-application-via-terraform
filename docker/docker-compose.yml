@@ -1,0 +1,29 @@
+services:
+  update:
+    image: test-aks-with-testing-application
+    network_mode: host
+    working_dir: /app
+    environment:
+      - ARM_CLIENT_ID=${ARM_CLIENT_ID}
+      - ARM_CLIENT_SECRET=${ARM_CLIENT_SECRET}
+      - ARM_TENANT_ID=${ARM_TENANT_ID}
+      - ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID}
+    entrypoint: ["sh", "-c"]
+    command: [
+      "terraform init && terraform apply -auto-approve"
+    ]
+  destroy:
+    image: test-aks-with-testing-application
+    network_mode: host
+    working_dir: /app
+    environment:
+      - ARM_CLIENT_ID=${ARM_CLIENT_ID}
+      - ARM_CLIENT_SECRET=${ARM_CLIENT_SECRET}
+      - ARM_TENANT_ID=${ARM_TENANT_ID}
+      - ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID}
+    entrypoint: ["sh", "-c"]
+    command: [
+      "terraform init && terraform apply -var=\"runTerraformK8s=false\" -auto-approve && \
+      cd terraform-k8s && terraform init && terraform destroy -auto-approve && \
+      cd .. && terraform destroy -auto-approve"
+    ]
