@@ -4,4 +4,4 @@
 set -e
 
 docker build -t azure-container -f docker/dockerfile .
-docker-compose -f docker/docker-compose.yml run --rm destroy
+docker compose -f docker/docker-compose.yml run --rm destroy
